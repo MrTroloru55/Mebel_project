@@ -1,6 +1,6 @@
 import os
 
-BOT_TOKEN = '8011663522:AAHwJS_Tgpsnb7vT2lLEWZIcgUZyqmww_uk'
+BOT_TOKEN = ''
 #ADMIN_IDS = []
 
 
