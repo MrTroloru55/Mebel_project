@@ -85,3 +85,16 @@ ALTER TABLE "tasks" ADD COLUMN "is_blocker" BOOLEAN DEFAULT FALSE;
 -- Добавляем столбец 'blocker_resolved', который показывает, был ли снят блокер.
 -- По умолчанию устанавливаем FALSE.
 ALTER TABLE "tasks" ADD COLUMN "blocker_resolved" BOOLEAN DEFAULT FALSE;
+
+#Добавляю таблицу комментариев
+CREATE TABLE IF NOT EXISTS "task_comments" (
+    comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER NOT NULL,
+    author_id INTEGER NOT NULL,
+    comment_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW')),
+    
+    -- ВСЕ ограничения FOREIGN KEY должны быть определены в конце
+    FOREIGN KEY (task_id) REFERENCES "tasks" (task_id) ON DELETE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES "users" (user_id) ON DELETE CASCADE
+);
