@@ -24,7 +24,7 @@ def escape_markdown_v2(text: str) -> str:
     special_chars = r"[_*\[\]()~`>#+-=|{}.!]"
     return re.sub(special_chars, r"\\\g<0>", text)
 
-
+#Запрос задач пользователя
 @user_router.callback_query(F.data == 'tasks_list')
 async def tasks_callback(callback_query: types.CallbackQuery):
     user_id = callback_query.from_user.id
@@ -63,7 +63,7 @@ async def tasks_callback(callback_query: types.CallbackQuery):
     else:
         await callback_query.message.answer("У вас пока нет назначенных задач.")
 
-
+#Изменения статуса задачи (Выполнить/сообщить о блокерах)
 @user_router.callback_query(F.data == 'task_done')
 async def task_success_finish(callback_query: types.CallbackQuery):
     try:

@@ -1,6 +1,7 @@
 import os
 
-BOT_TOKEN = ''
+with open('C:\\Users\\user\\Desktop\\token.txt', 'r') as file:
+    BOT_TOKEN = file.readline().strip()
 #ADMIN_IDS = []
 
 

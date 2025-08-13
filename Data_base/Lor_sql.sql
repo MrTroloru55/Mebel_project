@@ -73,3 +73,15 @@ INSERT INTO "user_tasks" (user_id, task_id) VALUES
 
 #Изменил пользователей на себя, себя и Влада
 
+#Обновил таблицу tasks аргументами, регулирующими статус задачи
+-- Добавляем столбец 'completed' с булевым значением для отслеживания завершения задачи.
+-- По умолчанию устанавливаем значение FALSE, так как новая задача еще не завершена.
+ALTER TABLE "tasks" ADD COLUMN "completed" BOOLEAN DEFAULT FALSE;
+
+-- Добавляем столбец 'is_blocker', который показывает, является ли задача блокирующей.
+-- По умолчанию также устанавливаем FALSE.
+ALTER TABLE "tasks" ADD COLUMN "is_blocker" BOOLEAN DEFAULT FALSE;
+
+-- Добавляем столбец 'blocker_resolved', который показывает, был ли снят блокер.
+-- По умолчанию устанавливаем FALSE.
+ALTER TABLE "tasks" ADD COLUMN "blocker_resolved" BOOLEAN DEFAULT FALSE;
