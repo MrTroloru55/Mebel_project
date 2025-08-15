@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.enums import ParseMode # Убедитесь, что этот импорт присутствует
 import re
 
-from Data_base.db_user import add_user, get_all_tasks, complete_task
+from Data_base.db_user import add_user, get_all_tasks, update_task_done_status
 from Keyboards.user_keyboard import user_keyboard_start, user_keyboard_close_task, get_confirmation_keyboard
 
 user_router = Router()
@@ -63,7 +63,7 @@ async def tasks_callback(callback_query: types.CallbackQuery):
     else:
         await callback_query.message.answer("У вас пока нет назначенных задач.")
 
-#Изменения статуса задачи (Выполнить/сообщить о блокерах)
+#Изменения статуса задачи (Выполнить/сообщить о блокерах)_1
 @user_router.callback_query(F.data == 'task_done')
 async def task_success_finish(callback_query: types.CallbackQuery):
     try:
@@ -94,7 +94,7 @@ async def task_success_finish(callback_query: types.CallbackQuery):
         print(f"Ошибка в task_success_finish: {str(e)}")
         await callback_query.answer("Ошибка при загрузке задач", show_alert=True)
 
-
+#Завершение задачи_шаг_2
 @user_router.callback_query(F.data.startswith('complete_'))
 async def select_task_handler(callback_query: types.CallbackQuery):
     try:
@@ -109,16 +109,14 @@ async def select_task_handler(callback_query: types.CallbackQuery):
         await callback_query.answer("Ошибка при выборе задачи", show_alert=True)
 
 
-# Обработчик подтверждения удаления
+#Завершение задачи шаг 3 (Реакция на get_confirmation_keyboard "Подтвердить")
 @user_router.callback_query(F.data.startswith('confirm_'))
 async def confirm_task_completion(callback_query: types.CallbackQuery):
     try:
         user_id = callback_query.from_user.id
         task_id = int(callback_query.data.split('_')[1])
 
-        # Удаляем задачу из БД
-        await complete_task(user_id, task_id)
-
+        await update_task_done_status(True, task_id, user_id)
         # Получаем обновленный список задач
         tasks = await get_all_tasks(user_id)
 

@@ -98,3 +98,6 @@ CREATE TABLE IF NOT EXISTS "task_comments" (
     FOREIGN KEY (task_id) REFERENCES "tasks" (task_id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) REFERENCES "users" (user_id) ON DELETE CASCADE
 );
+
+#Добавил чекбокс в user_tasks
+ALTER TABLE "user_tasks" ADD COLUMN "done" BOOLEAN DEFAULT FALSE;
