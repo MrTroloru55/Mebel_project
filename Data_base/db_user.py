@@ -1,3 +1,5 @@
+#from cgitb import text
+
 import aiosqlite
 
 from config import DB_PATH
@@ -68,6 +70,27 @@ async def update_task_done_status(done: bool, task_id: int, user_id: int) -> Non
         await cursor.execute("""
         UPDATE tasks
         SET completed = ? 
+        WHERE task_id = ? 
+        """, (1, task_id))
+        await connect.commit()
+
+
+#Функция добавления комментария блока и замены флага в задаче
+async def add_blocker(task_id: int, user_id: int, comment_text: str) -> None:
+    async with aiosqlite.connect(DB_PATH) as connect:
+        cursor = await connect.cursor()
+
+        # 1. Запись комментария
+        await cursor.execute(
+            'INSERT INTO task_comments (task_id, user_id, comment_text) VALUES (?, ?, ?)',
+            (task_id, user_id, comment_text)  # <-- Вот так правильно передавать параметры
+        )
+        await connect.commit()
+
+        # 2. Обновление статуса задачи
+        await cursor.execute("""
+        UPDATE tasks
+        SET is_blocker = ? 
         WHERE task_id = ? 
         """, (1, task_id))
         await connect.commit()
