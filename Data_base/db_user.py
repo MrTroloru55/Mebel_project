@@ -29,7 +29,7 @@ async def get_all_tasks(user_id: int):  # Добавляем user_id как ар
                 t.deadline
             FROM tasks t
             JOIN user_tasks ut ON t.task_id = ut.task_id
-            WHERE ut.user_id = ? and ut.done is not 1
+            WHERE ut.user_id = ? and ut.done is not 1 and t.is_blocker is not 1
         """, (user_id,))
         tasks = await cursor.fetchall()
         if tasks:
